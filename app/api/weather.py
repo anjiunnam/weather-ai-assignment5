@@ -1,10 +1,14 @@
+import os
 import requests
 
-API_KEY = "92df9d98c562e42a8c093196c643dee5"
+API_KEY = os.getenv("OPENWEATHER_API_KEY")
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 
 def fetch_weather(city: str):
+    if not API_KEY:
+        return {"error": "Weather API key is not configured."}
+
     params = {
         "q": city,
         "appid": API_KEY,

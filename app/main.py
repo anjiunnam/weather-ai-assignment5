@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,10 +10,12 @@ from app.etl.processor import normalize_weather
 from app.storage.weather_store import save_latest
 from app.reasoning.ai_engine import generate_result
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 @app.get("/", response_class=HTMLResponse)
