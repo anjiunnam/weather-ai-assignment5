@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.api.weather import fetch_weather
 from app.etl.processor import normalize_weather
-from app.storage.weather_store import save_latest
+
 from app.reasoning.ai_engine import generate_result
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,7 +47,7 @@ def analyze_weather(request: Request, city: str = Form(...)):
             context={"request": request, "result": None, "error": "Could not process weather data."},
         )
 
-    #save_latest(processed)
+    
     reasoning = generate_result(processed)
 
     result = {
