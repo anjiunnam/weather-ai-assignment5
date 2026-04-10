@@ -47,7 +47,7 @@ def analyze_weather(request: Request, city: str = Form(...)):
             context={"request": request, "result": None, "error": "Could not process weather data."},
         )
 
-    save_latest(processed)
+    #save_latest(processed)
     reasoning = generate_result(processed)
 
     result = {
