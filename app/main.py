@@ -1,31 +1,58 @@
-from weather import get_weather
-from processor import process_weather
-from ai_engine import analyze_weather
-from rules import risk_alert
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
-city = input("Enter city: ")
+from app.api.weather import fetch_weather
+from app.etl.processor import normalize_weather
+from app.storage.weather_store import save_latest
+from app.reasoning.ai_engine import generate_result
 
-raw = get_weather(city)
-processed = process_weather(raw)
+app = FastAPI()
 
-alerts = risk_alert(processed)
-ai_output = analyze_weather(processed)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
-print("\n--- Weather Summary ---")
-print(ai_output["summary"])
 
-print("\n--- Recommendation ---")
-print(ai_output["recommendation"])
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"request": request, "result": None, "error": None},
+    )
 
-print("\n--- Risks ---")
-if ai_output["risks"]:
-    for r in ai_output["risks"]:
-        print("-", r)
-else:
-    print("No major risks")
 
-print("\n--- Outdoor Suitability Score ---")
-print(f"{ai_output['score']}/100")
+@app.post("/", response_class=HTMLResponse)
+def analyze_weather(request: Request, city: str = Form(...)):
+    raw_data = fetch_weather(city)
 
-print("\n--- Suggested Activity ---")
-print(ai_output["activity"])
+    if "error" in raw_data:
+        return templates.TemplateResponse(
+            request=request,
+            name="index.html",
+            context={"request": request, "result": None, "error": raw_data["error"]},
+        )
+
+    processed = normalize_weather(raw_data)
+
+    if not processed:
+        return templates.TemplateResponse(
+            request=request,
+            name="index.html",
+            context={"request": request, "result": None, "error": "Could not process weather data."},
+        )
+
+    save_latest(processed)
+    reasoning = generate_result(processed)
+
+    result = {
+        **processed,
+        **reasoning
+    }
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"request": request, "result": result, "error": None},
+    )
