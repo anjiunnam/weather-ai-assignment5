@@ -1,0 +1,27 @@
+{
+  "name": "weather-ai-assignment5",
+  "version": "1.0.0",
+  "description": "1. Problem\r         Raw weather data is hard to interpret",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anjiunnam/weather-ai-assignment5.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anjiunnam/weather-ai-assignment5/issues"
+  },
+  "homepage": "https://github.com/anjiunnam/weather-ai-assignment5#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
