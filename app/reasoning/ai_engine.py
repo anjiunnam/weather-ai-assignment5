@@ -11,18 +11,21 @@ def generate_summary(weather_data: dict):
 def generate_recommendation(weather_data: dict):
     condition = weather_data["condition"].lower()
     temp = weather_data["temperature"]
+    wind_speed = weather_data["wind_speed"]
 
     if condition in ["rain", "thunderstorm", "snow", "drizzle"]:
-        return "It is better to stay indoors or carry proper protection outside."
+        return "Carry an umbrella or protective clothing and be careful on wet or slippery roads."
 
-    if temp > 30:
-        return "Stay hydrated and avoid too much time outdoors in peak heat."
+    if temp >= 35:
+        return "Avoid outdoor activity in peak afternoon hours and drink plenty of water."
 
-    if temp < 5:
-        return "Wear warm clothing before going outside."
+    if temp <= 5:
+        return "Wear layered warm clothing before going outside."
+
+    if wind_speed >= 12:
+        return "Be cautious in open outdoor areas because of strong wind."
 
     return "Weather looks comfortable for normal outdoor activities."
-
 
 def generate_result(weather_data: dict):
     return {

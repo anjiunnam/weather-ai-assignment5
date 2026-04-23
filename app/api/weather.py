@@ -1,4 +1,5 @@
 import os
+from urllib import response
 import requests
 
 API_KEY = os.getenv("OPENWEATHER_API_KEY")
@@ -16,8 +17,12 @@ def fetch_weather(city: str):
     }
 
     response = requests.get(BASE_URL, params=params, timeout=10)
+    
+    #if response.status_code != 200:
+     #   return {"error": "Could not fetch weather data. Check the city name."}
+    if response.status_code == 404:
+        return {"error": "City not found. Please enter a valid city name."}
 
     if response.status_code != 200:
-        return {"error": "Could not fetch weather data. Check the city name."}
-
+        return {"error": "Unable to fetch weather data right now. Please try again."}
     return response.json()

@@ -41,3 +41,25 @@ I did not choose prompt-first because the app does not mainly rely on long-conte
 - User accounts
 - Production-grade storage
 - Retrieval over documents
+
+
+
+## Assignment 6 Architecture Justification
+## Pipeline and Data Flow
+## Evaluation Summary
+## Baseline Comparison
+## Evidence-Based Improvement
+
+
+User enters city -> backend fetches raw weather data -> ETL normalizes response -> reasoning layer generates summary, recommendation, and risks -> UI displays result
+
+
+## Capability Not Implemented
+
+One important capability I did not implement is retrieval-first RAG.
+
+RAG would help only if the system needed to answer questions from stored documents, historical files, or multiple data sources.
+For this app, live API calls and deterministic reasoning were simpler and more appropriate.
+
+RAG would add retrieval logic, storage overhead, and more debugging complexity.
+I would consider adding it only if the app later needed historical weather comparison or document-based advisory features.
